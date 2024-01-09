@@ -142,6 +142,36 @@ class BaseEstimator(_HTMLDocumentationLinkMixin, _MetadataRequester):
     All estimators should specify all the parameters that can be set
     at the class level in their ``__init__`` as explicit keyword
     arguments (no ``*args`` or ``**kwargs``).
+
+    Examples:
+    ---------
+
+    >>> from sklearn.base import BaseEstimator
+    >>> import numpy as np
+    >>> class CustomEstimator(BaseEstimator):
+            def __init__(self, hyper_param=0, random_state=None):
+                self.hyper_param = hyper_param
+                self.random_state = random_state
+            def fit(self, X, y=None):
+                # fit logic
+                return self
+            def predict(self, X):
+                # predict logic
+                y_pred = [self.hyper_param*self.random_state] * len(X) # filler code so this runs
+                return y_pred
+    >>> custom_estimator = CustomEstimator(hyper_param=1, random_state=42)
+    >>> custom_estimator.get_params()
+    {'hyper_param': 1, 'random_state': 42}
+    >>> custom_estimator.set_params(hyper_param=2)
+    CustomEstimator(hyper_param=2, random_state=42)
+    >>> training_data = np.array([[1,2,3],[4,5,6]])
+    >>> training_labels = np.array([0,0])
+    >>> custom_estimator.fit(training_data,training_labels)
+    CustomEstimator(hyper_param=2, random_state=42)
+    >>> test_data = np.array([[7,8,9],[10,11,12]])
+    >>> custom_estimator.predict(test_data)
+    [84, 84]
+
     """
 
     @classmethod
